@@ -88,7 +88,8 @@ while ~isempty(undeterminTruck)
             fir.LeaveTime{bestI(i),i});
         
         % update all other path using new road information
-        [addedTime, tempBestI] = updateAllPath(newRoadInfoCell, fir);
+        [addedTime, tempBestI] = updateAllPath(newRoadInfoCell, fir,...
+            setdiff(undeterminTruck,i));
         
         if addedTime<minAddedTime 
             minAddedTime = addedTime;
@@ -110,7 +111,8 @@ while ~isempty(undeterminTruck)
             fir.LeaveTime{bestI(target),target});
     
     % update all path
-    [~, ~, fir] = updateAllPath(roadInfoCell, fir);
+    [~, ~, fir] = updateAllPath(roadInfoCell, fir,...
+        setdiff(undeterminTruck,target));
     
     % update truck priority list and undetermined truck list
     truckPriorityList = [truckPriorityList; target];
