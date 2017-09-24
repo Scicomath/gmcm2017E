@@ -100,9 +100,9 @@ while ~isempty(undeterminTruck)
     
     % fill solutionCell using target path
     solutionCell{target} = generateResult(...
-        firPathCell{bestI(target),target},...
-        firArriveTimeCell{bestI(target),target},...
-        firLeaveTimeCell{bestI(target),target}); 
+        fir.Path{bestI(target),target},...
+        fir.ArriveTime{bestI(target),target},...
+        fir.LeaveTime{bestI(target),target}); 
     
     % update road information by adding targe path
     roadInfoCell = updateRoadInfo(roadInfoCell,...
@@ -116,7 +116,7 @@ while ~isempty(undeterminTruck)
     
     % update truck priority list and undetermined truck list
     truckPriorityList = [truckPriorityList; target];
-    undeterminTruck(id) = [];
+    undeterminTruck = setdiff(undeterminTruck, target);
 end
 
 
