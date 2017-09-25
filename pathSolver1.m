@@ -3,7 +3,7 @@ function [ solutionCell, totalTime, fir ] = pathSolver1( firLaunchNode )
 %   input:
 %       firLaunchNode: truckNum*1 matrix, first launching node
 %   output:
-%       solutionCell: truckNum*1 cell, the whole solution,
+%       solutionCell: truckNum*1 cell, the first stage solution,
 %           every row means a path for a truck, and the format is specified
 %           by the problem, i.e. truckID, nodeID, leave time, nodeID, arrive
 %           time, leave time, ...
