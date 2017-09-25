@@ -23,6 +23,7 @@ function [shortestPaths, totalCosts] = kShortestPath(netCostMatrix, source, dest
 %  1-fixed a bug reported by Babak Zafari that prevented from finding ALL
 %    the shortest paths in large networks
 %==============================================================
+G = digraph(netCostMatrix);
 if source > size(netCostMatrix,1) || destination > size(netCostMatrix,1)
     warning('The source or destination node are not part of netCostMatrix');
     shortestPaths=[];
@@ -30,7 +31,8 @@ if source > size(netCostMatrix,1) || destination > size(netCostMatrix,1)
 else
     %---------------------INITIALIZATION---------------------
     k=1;
-    [path cost] = dijkstra(netCostMatrix, source, destination);
+    %[path cost] = dijkstra(netCostMatrix, source, destination);
+    [path, cost] = shortestpath(G, source, destination);
     %P is a cell array that holds all the paths found so far:
     if isempty(path)
         shortestPaths=[];
@@ -112,7 +114,9 @@ else
                 end
 
                 %call dijkstra between deviation vertex to destination node    
-                [dev_p c] = dijkstra(temp_netCostMatrix, P_(index_dev_vertex), destination);
+                %[dev_p, c] = dijkstra(temp_netCostMatrix, P_(index_dev_vertex), destination);
+                tempG = digraph(temp_netCostMatrix);
+                [dev_p, c] = shortestpath(tempG, P_(index_dev_vertex), destination);
                 if ~isempty(dev_p)
                     path_number = path_number + 1;
                     P{path_number,1} = [sub_P(1:end-1) dev_p] ;  %concatenate sub path- to -vertex -to- destination
