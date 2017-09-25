@@ -19,10 +19,10 @@ arriveTime = maxTime - tempLeaveTime(end:-1:1);
 leaveTime = maxTime - tempArriveTime(end:-1:1);
 
 n = length(path);
-solution = zeros(1,(n-1)*3+2);
+solution = zeros(1,(n-1)*3+1);
 solution(1) = path(1);
 solution(3:3:end) = path(2:end);
-solution(2:3:end) = leaveTime;
+solution(2:3:end) = leaveTime(1:end-1);
 solution(4:3:end) = arriveTime(2:end);
 
 end

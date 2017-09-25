@@ -49,7 +49,7 @@ for i = 1:truckNum
         XPathList{i}(k) = nodeData(solutionCell{i}(j),1);
         YPathList{i}(k) = nodeData(solutionCell{i}(j),2);
         timeList{i}(k) = solutionCell{i}(j+1);
-        if solutionCell{i}(j+2)-solutionCell{i}(j+1) > 0.000001
+        if j+2<=n&&solutionCell{i}(j+2)-solutionCell{i}(j+1) > 0.000001
             k = k + 1;
             XPathList{i}(k) = nodeData(solutionCell{i}(j),1);
             YPathList{i}(k) = nodeData(solutionCell{i}(j),2);
