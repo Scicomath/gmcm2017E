@@ -1,11 +1,7 @@
-function [ solutionCell, totalTime, fir ] = pathSolver( firLaunchNode, loadNode,...
-    secLaunchNode )
-%pathSolver Generate a whole solution given first launching node, loading 
-%   node, and second launching node
+function [ solutionCell, totalTime, fir ] = pathSolver1( firLaunchNode )
+%pathSolver Generate solution for first stage giving first launching node
 %   input:
 %       firLaunchNode: truckNum*1 matrix, first launching node
-%       loadNode: truckNum*1 matrix, loading node
-%       secLaunchNode: truckNum*1 matrix, second launching node
 %   output:
 %       solutionCell: truckNum*1 cell, the whole solution,
 %           every row means a path for a truck, and the format is specified
@@ -135,8 +131,6 @@ for i = 1:truckNum
     solutionCell{i}(2:3:end) = solutionCell{i}(2:3:end) + temp;
     solutionCell{i}(4:3:end) = solutionCell{i}(4:3:end) + temp;
 end
-
-% to be continue ...
 
 end
 

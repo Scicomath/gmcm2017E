@@ -109,8 +109,7 @@ firLaunchNode = LaunchNode(1:truckNum);
 secLaunchNode = LaunchNode(truckNum+1:end);
 loadNode = Znodes(randperm(length(Znodes)));
 tic
-[ solutionCell, totalTime, fir ] = pathSolver( firLaunchNode, loadNode,...
-    secLaunchNode );
+[ solutionCell, totalTime, fir ] = pathSolver1( firLaunchNode );
 toc
 frameNum = 400;
 plotSolution(solutionCell, binAdjMat, mainRoadMat, frameNum)
