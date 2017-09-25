@@ -1,4 +1,4 @@
-function [ solutionCell ] = pathSolver( firLaunchNode, loadNode,...
+function [ solutionCell, totalTime, fir ] = pathSolver( firLaunchNode, loadNode,...
     secLaunchNode )
 %pathSolver Generate a whole solution given first launching node, loading 
 %   node, and second launching node
@@ -12,7 +12,7 @@ function [ solutionCell ] = pathSolver( firLaunchNode, loadNode,...
 %           by the problem, i.e. truckID, nodeID, leave time, nodeID, arrive
 %           time, leave time, ...
 
-global timeMat
+global timeMat nodeData
 
 
 k = 10;         % number of shortest path 
@@ -33,28 +33,28 @@ fir.LeaveTime = cell(k,truckNum);
 fir.TotalTime = zeros(k,truckNum);
 for i = 1:truckNum
     if truckType(i) == 1
-        [shortestPaths, totalTime] = kShortestPath(timeMat.A,...
+        [shortestPaths, totalT] = kShortestPath(timeMat.A,...
             firLaunchNode(i), initNode(i), k);
     elseif truckType(i) == 2
-        [shortestPaths, totalTime] = kShortestPath(timeMat.B,...
+        [shortestPaths, totalT] = kShortestPath(timeMat.B,...
             firLaunchNode(i), initNode(i), k);
     elseif truckType(i) == 3
-        [shortestPaths, totalTime] = kShortestPath(timeMat.C,...
+        [shortestPaths, totalT] = kShortestPath(timeMat.C,...
             firLaunchNode(i), initNode(i), k);
     end
     fir.Path(:,i) = shortestPaths';
-    fir.TotalTime(:,i) = totalTime';
+    fir.TotalTime(:,i) = totalT';
 end
 initT = 0;
 for i = 1:k
     for j = 1:truckNum
-        if truckType(i) == 1
+        if truckType(j) == 1
             [~,~,fir.ArriveTime{i,j}] = pathTimeFun( fir.Path{i,j},...
                 timeMat.A,nodeData,initT );
-        elseif truckType(i) == 2
+        elseif truckType(j) == 2
             [~,~,fir.ArriveTime{i,j}] = pathTimeFun( fir.Path{i,j},...
                 timeMat.B,nodeData,initT );
-        elseif truckType(i) == 3
+        elseif truckType(j) == 3
             [~,~,fir.ArriveTime{i,j}] = pathTimeFun( fir.Path{i,j},...
                 timeMat.C,nodeData,initT );
         end
@@ -98,12 +98,13 @@ while ~isempty(undeterminTruck)
         end
     end
     
+    
     % fill solutionCell using target path
     solutionCell{target} = generateResult(...
         fir.Path{bestI(target),target},...
         fir.ArriveTime{bestI(target),target},...
         fir.LeaveTime{bestI(target),target}); 
-    
+
     % update road information by adding targe path
     roadInfoCell = updateRoadInfo(roadInfoCell,...
             fir.Path{bestI(target),target},...
@@ -119,6 +120,23 @@ while ~isempty(undeterminTruck)
     undeterminTruck = setdiff(undeterminTruck, target);
 end
 
+totalTime = 0;
+maxTime = 0;
+for i = 1:truckNum
+    temp = fir.TotalTime(bestI(i),i);
+    totalTime = totalTime + temp;
+    if temp>maxTime
+        maxTime = temp;
+    end
+end
+
+for i = 1:truckNum
+    temp = maxTime - fir.TotalTime(bestI(i),i);
+    solutionCell{i}(2:3:end) = solutionCell{i}(2:3:end) + temp;
+    solutionCell{i}(4:3:end) = solutionCell{i}(4:3:end) + temp;
+end
+
+% to be continue ...
 
 end
 

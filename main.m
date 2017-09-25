@@ -1,10 +1,12 @@
-global timeMat      % set global variable
+global timeMat mainRoadMat nodeData     % set global variable
+
+%rng(149)
 
 addpath('kshortestPath')
 
 % read node data
 [nodeData] = xlsread('fj1_nodeData.xlsx');
-nodeNum = size(nodeData,1); % ????
+nodeNum = size(nodeData,1); 
 
 Dnodes = 1:2;       % deposite node set
 Znodes = 3:8;       % loading node set
@@ -92,12 +94,12 @@ XPath = interp1(timeList,xPathList,T);
 YPath = interp1(timeList,yPathList,T);
 
 
-h = plot(XPath(1),YPath(1),'ro','MarkerSize',9);
-for i = 1:frameNum
-    h.XData = XPath(i);
-    h.YData = YPath(i);
-    drawnow;
-end
+% h = plot(XPath(1),YPath(1),'ro','MarkerSize',9);
+% for i = 1:frameNum
+%     h.XData = XPath(i);
+%     h.YData = YPath(i);
+%     drawnow;
+% end
 
 %% demonstration of a random whole solution
 truckNum = 24;
@@ -105,5 +107,10 @@ truckNum = 24;
 LaunchNode = Fnodes(randperm(length(Fnodes),truckNum*2));
 firLaunchNode = LaunchNode(1:truckNum);
 secLaunchNode = LaunchNode(truckNum+1:end);
-
-
+loadNode = Znodes(randperm(length(Znodes)));
+tic
+[ solutionCell, totalTime, fir ] = pathSolver( firLaunchNode, loadNode,...
+    secLaunchNode );
+toc
+frameNum = 400;
+plotSolution(solutionCell, binAdjMat, mainRoadMat, frameNum)
