@@ -1,11 +1,11 @@
-function [ solutionCell, totalTime, fir ] = pathSolver1( firLaunchNode )
+function [ solutionCell, totalTime, fir, maxTime ] = pathSolver1( firLaunchNode )
 %pathSolver Generate solution for first stage giving first launching node
 %   input:
 %       firLaunchNode: truckNum*1 matrix, first launching node
 %   output:
 %       solutionCell: truckNum*1 cell, the first stage solution,
 %           every row means a path for a truck, and the format is specified
-%           by the problem, i.e. truckID, nodeID, leave time, nodeID, arrive
+%           by the problem, i.e. nodeID, leave time, nodeID, arrive
 %           time, leave time, ...
 
 global timeMat nodeData
@@ -60,6 +60,9 @@ end
 
 
 bestI = ones(truckNum, 1);      % best path in k shortest path
+if sum(bestI)~=truckNum
+    disp('best ~= truckNum')
+end
 
 truckPriorityList = [];         % list of truck priority, higher priority 
                                 % in the beginning
@@ -99,7 +102,7 @@ while ~isempty(undeterminTruck)
     solutionCell{target} = generateResult(...
         fir.Path{bestI(target),target},...
         fir.ArriveTime{bestI(target),target},...
-        fir.LeaveTime{bestI(target),target}); 
+        fir.LeaveTime{bestI(target),target},1); 
 
     % update road information by adding targe path
     roadInfoCell = updateRoadInfo(roadInfoCell,...

@@ -58,7 +58,21 @@ for i = 1:truckNum
     end
 end
 
-maxTime = solutionCell{1}(end);
+maxTime = 0;
+for i = 1:truckNum
+    if maxTime < solutionCell{i}(end)
+        maxTime = solutionCell{i}(end);
+    end
+end
+
+for i = 1:truckNum
+    if solutionCell{i}(end)~=maxTime
+        timeList{i} = [timeList{i}, maxTime];
+        XPathList{i} = [XPathList{i}, XPathList{i}(end)];
+        YPathList{i} = [YPathList{i}, YPathList{i}(end)];
+    end
+end
+
 
 T = linspace(0,maxTime,frameNum);
 X = zeros(truckNum,frameNum);
